@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 import RouteSwitcher from './components/RouteSwitcher'
 import {CssBaseline, Container} from '@material-ui/core';

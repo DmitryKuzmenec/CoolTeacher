@@ -1,21 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import MenuIcon from '@material-ui/icons/Menu';
-import AddBox from '@material-ui/icons/AddBox';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import {
+  AppBar,
+  CssBaseline,
+  Divider,
+  Drawer,
+  Hidden,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  Typography
+} from '@material-ui/core';
+import {
+  Mail, 
+  AddBox, 
+  Menu, 
+  AccountBox,
+  MoveToInbox,
+  Group
+} from '@material-ui/icons';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AddUser from "./AddUser"
 import AddGroup from "./AddGroup"
@@ -52,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    marginTop: theme.spacing(10),
   },
 }));
 
@@ -72,19 +79,23 @@ function ResponsiveDrawer(props) {
       <Divider />
       <List>
         <ListItem button key="AddUser" onClick={() => setAction("addUser")}>
-            <ListItemIcon><AddBox /></ListItemIcon>
+            <ListItemIcon><AccountBox /></ListItemIcon>
             <ListItemText primary="Добавить ученика" />
         </ListItem>
         <ListItem button key="AddGroup"onClick={() => setAction("addGroup")}>
-            <ListItemIcon><AddBox /></ListItemIcon>
+            <ListItemIcon><Group /></ListItemIcon>
             <ListItemText primary="Добавить группу" />
+        </ListItem>
+        <ListItem button key="TypeOfService"onClick={() => setAction("typeOfService")}>
+            <ListItemIcon><AddBox /></ListItemIcon>
+            <ListItemText primary="Тип услуги" />
         </ListItem>
       </List>
       <Divider />
       <List>
         {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
           <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemIcon>{index % 2 === 0 ? <MoveToInbox /> : <Mail />}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
@@ -93,7 +104,7 @@ function ResponsiveDrawer(props) {
       <List>
         {['All mail', 'Trash', 'Spam'].map((text, index) => (
           <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemIcon>{index % 2 === 0 ? <MoveToInbox /> : <Mail />}</ListItemIcon>
             <ListItemText primary={text} />
           </ListItem>
         ))}
@@ -115,7 +126,7 @@ function ResponsiveDrawer(props) {
             onClick={handleDrawerToggle}
             className={classes.menuButton}
           >
-            <MenuIcon />
+            <Menu />
           </IconButton>
           <Typography variant="h6" noWrap>
             Cool Teacher панель управления
@@ -154,9 +165,7 @@ function ResponsiveDrawer(props) {
         </Hidden>
       </nav>
       <main className={classes.content}>
-          <div>
             <Action name={action}/>
-          </div>
       </main>
     </div>
   );
