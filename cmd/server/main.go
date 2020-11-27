@@ -34,6 +34,10 @@ func main() {
 	userHandler := handlers.NewUserHandler(userService, log)
 	//admin := handlers.NewUsers()
 	e := echo.New()
+
+	// frontend
+	e.Static("/", "frontend/build")
+
 	users := e.Group("/users")
 	users.POST("/create", userHandler.Create)
 	users.GET("/list", userHandler.List)

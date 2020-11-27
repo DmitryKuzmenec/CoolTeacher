@@ -20,24 +20,41 @@ const useStyles = makeStyles((theme) => ({
 
 function DatePicker(props) {
     const label = props['label'];
+    const onChange = props['onChange'];
+    const nowDate = new Date();
+    const maxDate = new Date().setFullYear(nowDate.getFullYear() -1);
+    const minDate = new Date().setFullYear(nowDate.getFullYear() - 19);
+
     const classes = useStyles();
-    const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+    const [selectedDate, setSelectedDate] = React.useState(new Date('2007-01-01'));
+    const [open, setOpen] = React.useState(false);
     function handleDateChange(date) {
-        setSelectedDate(date);
+      if (onChange !== undefined) {
+        onChange(date)
+      }
+      setSelectedDate(date);
+      setOpen(false);
     }
     
     const newLocal = <KeyboardDatePicker
-    disableToolbar
-    variant="inline"
-    format="MM/dd/yyyy"
-    margin="normal"
-    id="date-picker-inline"
-    label={label}
-    value={selectedDate}
-    onChange={handleDateChange}
-    KeyboardButtonProps={{
-      'aria-label': 'change date',
-    }}
+      onOpen={()=>setOpen(true)}
+      open={open}
+      disableToolbar
+      variant="inline"
+      format="MM/dd/yyyy"
+      margin="normal"
+      id="date-picker-inline"
+      label={label}
+      value={selectedDate}
+      onChange={handleDateChange}
+      KeyboardButtonProps={{
+        'aria-label': 'change date',
+      }}
+      maxDateMessage="слишком молод"
+      minDateMessage="слишком взрослый"
+      invalidDateMessage="не верная дата"
+      maxDate={maxDate}
+      minDate={minDate}
   />
     return(
         <MuiPickersUtilsProvider utils={DateFnsUtils}>

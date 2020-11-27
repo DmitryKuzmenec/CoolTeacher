@@ -22,8 +22,7 @@ import {
 } from '@material-ui/core';
 import {Save} from '@material-ui/icons'
 import DatePicker from './DatePicker'
-
-
+import User from '../lib/user'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -62,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
 
 function AddUser() {
     const classes = useStyles();
-    const [sex, setSex] = React.useState('');
+    const [gender, setGender] = React.useState('');
     const [fname, setFname] = React.useState('');
     const [lname, setLname] = React.useState('');
     const [email, setEmail] = React.useState('');
@@ -71,8 +70,8 @@ function AddUser() {
     const [info, setInfo] = React.useState('');
     const [openConfirmationDialog, setOpenConfirmationDialog] = React.useState(false);
     
-    function handleSexChange(e) {
-        setSex(e.target.value);
+    function handleGenderChange(e) {
+        setGender(e.target.value);
     }
     function handleFnameChange(e) {
         setFname(e.target.value);
@@ -86,8 +85,18 @@ function AddUser() {
     function handlePhoneChange(e) {
         setPhone(e.target.value);
     }
-    function handleBirthDateChange(e) {
-        setBirthDate(e.target.value);
+    function handleBirthDateChange(date) {
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        if (`${month}`.length === 1) {
+            month = "0" + month
+        }
+        let day = date.getDate();
+        if (`${day}`.length === 1) {
+            day = "0" + day
+        }
+        let dateFormated = `${month}/${day}/${year}`;
+        setBirthDate(dateFormated);
     }
     function handleInfoChange(e) {
         setInfo(e.target.value);
@@ -100,19 +109,28 @@ function AddUser() {
         console.log("no need save yet...");
     }
     function closeWithSave() {
-        //console.log(data);
+        let user = {
+            fname:       fname,
+            lname:       lname,
+            gender:      gender,
+            email:       email,
+            phone:       phone,
+            birthDate:   birthDate,
+            description: info,
+        };
+        User.Save(user);
         setOpenConfirmationDialog(false);
     }
-    let textSex = "";
-    if (sex === "m") {
-        textSex = "мальчик"
-    } else if (sex === "f") {
-        textSex = "девочка"
+    let textGender = "";
+    if (gender === "m") {
+        textGender = "мальчик"
+    } else if (gender === "f") {
+        textGender = "девочка"
     }
     const dataDialog = [
         {name: "Имя", val: fname},
         {name: "Фамилия", val: lname},
-        {name: "Пол", val: textSex},
+        {name: "Пол", val: textGender},
         {name: "Дата рождения", val: birthDate},
         {name: "Электронная почта", val: email},
         {name: "Номер телефона", val: phone},
@@ -126,12 +144,12 @@ function AddUser() {
                 <TextField id="userEmail" label="Электронная почта" onChange={handleEmailChange}/>
                 <TextField id="userPhone" label="Телефон" onChange={handlePhoneChange} />
                 <FormControl className={classes.formControl}>
-                    <InputLabel id="userSex-label">Пол</InputLabel>
+                    <InputLabel id="userGender-label">Пол</InputLabel>
                     <Select
-                        labelId="userSex-label"
-                        id="userSex"
-                        value={sex}
-                        onChange={handleSexChange}
+                        labelId="userGender-label"
+                        id="userGender"
+                        value={gender}
+                        onChange={handleGenderChange}
                     >
                         <MenuItem value={"m"}>Мальчик</MenuItem>
                         <MenuItem value={"f"}>Девочка</MenuItem>

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/DmitryKuzmenec/CoolTeacher/logger"
 	"github.com/DmitryKuzmenec/CoolTeacher/model"
@@ -27,21 +28,32 @@ func NewUserHandler(user *services.UserService, log *logger.Logger) *UserHandler
 
 // Create - create user
 func (h *UserHandler) Create(ctx echo.Context) error {
-	var user model.User
-	if err := ctx.Bind(&user); err != nil {
+	var userReq model.UserData
+	if err := ctx.Bind(&userReq); err != nil {
 		h.log.Error(err)
 		return nil
 	}
-	if user.Fname == "" {
+	if userReq.Fname == "" {
 		h.log.Error(errors.New("user first name is empty!"))
 		return ctx.String(http.StatusBadRequest, "User first name is empty!")
 	}
-	if user.Lname == "" {
+	if userReq.Lname == "" {
 		return ctx.String(http.StatusBadRequest, "User last name is empty!")
 	}
-	if user.Gender == "" {
+	if userReq.Gender == "" {
 		return ctx.String(http.StatusBadRequest, "User gender name is empty!")
 	}
+	birthDate := time.Time(userReq.BirthDate)
+	user := model.User{
+		Fname:       userReq.Fname,
+		Lname:       userReq.Lname,
+		Gender:      userReq.Gender,
+		BirthDate:   &birthDate,
+		Phone:       userReq.Phone,
+		Email:       userReq.Email,
+		Description: userReq.Description,
+	}
+
 	id, err := h.user.Create(&user)
 	if err != nil {
 		return err
